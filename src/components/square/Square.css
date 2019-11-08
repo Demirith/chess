@@ -1,0 +1,12 @@
+.board__square {
+    border: 1px solid black;
+    background-color: #f3f9ff;
+}
+
+.board__square--blue {
+    background-color: #537782;
+}
+
+.board__square--selected {
+    border: medium solid #31c6ff;
+}
