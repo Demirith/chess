@@ -35,7 +35,7 @@ function Board(props) {
         const nextPosition = { x: clickedSquare.positionX, y: clickedSquare.positionY };
 
         //Update piece position
-        if(previousSelectedPiece && props.rules(previousSelectedPiece.type, currentPosition, nextPosition)) {
+        if(previousSelectedPiece && props.rules(previousSelectedPiece.type, previousSelectedPiece.isDefaultColor, currentPosition, nextPosition)) {
           previousSelectedPiece.positionY = clickedSquare.positionY;
           previousSelectedPiece.positionX = clickedSquare.positionX;
 

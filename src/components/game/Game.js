@@ -3,6 +3,7 @@ import './Game.css';
 import Board from  "../board/Board";
 import VerticalDescription from "../verticalDescription/VerticalDescription";
 import HorizontalDescription from "../horizontalDescription/HorizontalDescription";
+import { pawnRules } from "./utils/GameUtils"; 
 
 function Game() {
   const [pieces, setPieces] = useState([]);
@@ -117,24 +118,12 @@ function Game() {
     
   }, [initialized, getPiecesDefaultsquareId]);
 
-  const pawnRule = (currentPosition, nextPosition) => {
-    if (currentPosition.y < nextPosition.y && currentPosition.x === nextPosition.x) {
-      if (currentPosition.y === 2 && nextPosition.y <= 4) {
-        return true;
-      } else if ((currentPosition.y + 1) === nextPosition.y) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  const rules = (pieceType, currentPosition, nextPosition) => {
+  const rules = (pieceType, isWhite, currentPosition, nextPosition) => {
     let validMove = false;
 
     switch (pieceType) {
       case pieceTypes.Pawn:
-        validMove = pawnRule(currentPosition, nextPosition);
+        validMove = pawnRules(currentPosition, nextPosition, isWhite);
         break;
       case pieceTypes.Rook:
         console.log("rook clicked");
