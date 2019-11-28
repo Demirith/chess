@@ -3,7 +3,7 @@ import './Game.css';
 import Board from  "../board/Board";
 import VerticalDescription from "../verticalDescription/VerticalDescription";
 import HorizontalDescription from "../horizontalDescription/HorizontalDescription";
-import { pawnRules, knightRules } from "./utils/GameUtils"; 
+import { pawnRules, knightRules, knightRulesV2 } from "./utils/GameUtils"; 
 
 function Game() {
   const [pieces, setPieces] = useState([]);
@@ -129,7 +129,7 @@ function Game() {
         console.log("rook clicked");
         break;
       case pieceTypes.Knight:
-        validMove = knightRules(currentPosition, nextPosition);
+        validMove = knightRulesV2(currentPosition, nextPosition);
         break;
       
       default:

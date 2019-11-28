@@ -29,3 +29,29 @@ export const knightRules = (currentPosition, nextPosition) => {
 
   return false;
 };
+
+export const knightRulesV2 = (currentPosition, nextPosition) => {
+  const yDifference = Math.abs(currentPosition.y - nextPosition.y);
+  const xDifference = Math.abs(currentPosition.x - nextPosition.x);
+
+/*  
+  let opposite;
+  let adjecent;
+
+  if (yDifference > xDifference) {
+    opposite = xDifference;
+    adjecent = yDifference;
+  } else {
+    opposite = yDifference;
+    adjecent = xDifference;
+  } */
+
+  // hyp * cos(acos())
+  //const test = Math.sqrt(Math.pow(yDifference, 2) + Math.pow(xDifference, 2)) * Math.cos(Math.atan(opposite / adjecent));
+
+  if ((xDifference === 2 && yDifference === 1) || (yDifference === 2 && xDifference === 1)) {
+    return true;
+  }
+
+  return false;
+};

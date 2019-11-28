@@ -1,4 +1,4 @@
-import { pawnRules, knightRules } from '../utils/GameUtils';
+import { pawnRules, knightRulesV2 } from '../utils/GameUtils';
 
 describe("Game rules", () => {
     describe("Pawn", () => {
@@ -175,7 +175,7 @@ describe("Game rules", () => {
             let validMove = false;
 
             //Act 
-            validMove = knightRules(currentPosition, nextPosition);
+            validMove = knightRulesV2(currentPosition, nextPosition);
             
             //Assert
             expect(validMove).toBe(true);
@@ -188,7 +188,7 @@ describe("Game rules", () => {
             let validMove = false;
 
             //Act 
-            validMove = knightRules(currentPosition, nextPosition);
+            validMove = knightRulesV2(currentPosition, nextPosition);
             
             //Assert
             expect(validMove).toBe(true);
@@ -201,7 +201,7 @@ describe("Game rules", () => {
             let validMove = false;
 
             //Act 
-            validMove = knightRules(currentPosition, nextPosition);
+            validMove = knightRulesV2(currentPosition, nextPosition);
             
             //Assert
             expect(validMove).toBe(true);
@@ -214,7 +214,7 @@ describe("Game rules", () => {
             let validMove = false;
 
             //Act 
-            validMove = knightRules(currentPosition, nextPosition);
+            validMove = knightRulesV2(currentPosition, nextPosition);
             
             //Assert
             expect(validMove).toBe(true);
