@@ -1,4 +1,4 @@
-import { pawnRules, knightRulesV2 } from '../utils/GameUtils';
+import { pawnRules, knightRules, bishopRules, kingRules, rookRules } from '../utils/GameUtils';
 
 describe("Game rules", () => {
     describe("Pawn", () => {
@@ -168,14 +168,14 @@ describe("Game rules", () => {
     });
 
     describe("Knight", () => {
-        describe("Should be able to move two steps forward and one to the left", () => {
+        describe("Should be able to move two steps vertically and one step horizontally", () => {
             //Arrange
-            const currentPosition = { y: 1, x: 7 };
-            const nextPosition = { y: 3, x: 6 };
+            const yDifference = 2;
+            const xDifference = 1;
             let validMove = false;
 
             //Act 
-            validMove = knightRulesV2(currentPosition, nextPosition);
+            validMove = knightRules(yDifference, xDifference);
             
             //Assert
             expect(validMove).toBe(true);
@@ -183,38 +183,98 @@ describe("Game rules", () => {
 
         describe("Should be able to move two steps forward and one to the right", () => {
             //Arrange
-            const currentPosition = { y: 1, x: 7 };
-            const nextPosition = { y: 3, x: 8 };
+            const yDifference = 1;
+            const xDifference = 2;
             let validMove = false;
 
             //Act 
-            validMove = knightRulesV2(currentPosition, nextPosition);
+            validMove = knightRules(yDifference, xDifference);
+            
+            //Assert
+            expect(validMove).toBe(true);
+        });
+    });
+
+    describe("Bishop", () => {
+        describe("Should be able to move diagonally", () => {
+            //Arrange
+            const yDifference = 2;
+            const xDifference = 2;
+            let validMove = false;
+
+            //Act 
+            validMove = bishopRules(yDifference, xDifference);
+            
+            //Assert
+            expect(validMove).toBe(true);
+        });
+    });
+
+    describe("King", () => {
+        describe("Should be able to move one step vertically", () => {
+            //Arrange
+            const yDifference = 1;
+            const xDifference = 0;
+            let validMove = false;
+
+            //Act 
+            validMove = kingRules(yDifference, xDifference);
             
             //Assert
             expect(validMove).toBe(true);
         });
 
-        describe("Should be able to move two steps back and one to the left", () => {
+        describe("Should be able to move one step horizontally", () => {
             //Arrange
-            const currentPosition = { y: 3, x: 8 };
-            const nextPosition = { y: 1, x: 7 };
+            const yDifference = 0;
+            const xDifference = 1;
             let validMove = false;
 
             //Act 
-            validMove = knightRulesV2(currentPosition, nextPosition);
+            validMove = kingRules(yDifference, xDifference);
             
             //Assert
             expect(validMove).toBe(true);
         });
 
-        describe("Should be able to move two steps back and one to the right", () => {
+        describe("Should be able to move one step diagonally", () => {
             //Arrange
-            const currentPosition = { y: 3, x: 6 };
-            const nextPosition = { y: 1, x: 7 };
+            const yDifference = 1;
+            const xDifference = 1;
             let validMove = false;
 
             //Act 
-            validMove = knightRulesV2(currentPosition, nextPosition);
+            validMove = kingRules(yDifference, xDifference);
+            
+            //Assert
+            expect(validMove).toBe(true);
+        });
+    });
+
+    describe("Rook", () => {
+        describe("Should be able to move vertically", () => {
+            //Arrange
+            const yDifference = 5;
+            const xDifference = 0;
+
+            let validMove = false;
+
+            //Act 
+            validMove = rookRules(yDifference, xDifference);
+            
+            //Assert
+            expect(validMove).toBe(true);
+        });
+
+        describe("Should be able to move horizontally", () => {
+            //Arrange
+            const yDifference = 0;
+            const xDifference = 4;
+
+            let validMove = false;
+
+            //Act 
+            validMove = rookRules(yDifference, xDifference);
             
             //Assert
             expect(validMove).toBe(true);

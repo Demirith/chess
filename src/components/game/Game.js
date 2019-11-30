@@ -3,7 +3,7 @@ import './Game.css';
 import Board from  "../board/Board";
 import VerticalDescription from "../verticalDescription/VerticalDescription";
 import HorizontalDescription from "../horizontalDescription/HorizontalDescription";
-import { pawnRules, knightRules, knightRulesV2 } from "./utils/GameUtils"; 
+import { pawnRules, knightRules, bishopRules, kingRules, rookRules } from "./utils/GameUtils"; 
 
 function Game() {
   const [pieces, setPieces] = useState([]);
@@ -41,9 +41,9 @@ function Game() {
         } else if (squareId === "1c") {
           id = "bishop" + squareId;
         } else if (squareId === "1d") {
-          id = "king" + squareId;
-        } else if (squareId === "1e") {
           id = "queen" + squareId;
+        } else if (squareId === "1e") {
+          id = "king" + squareId;
         } else if (squareId === "1f") {
           id = "bishop" + squareId;
         } else if (squareId === "1g") {
@@ -121,17 +121,28 @@ function Game() {
   const rules = (pieceType, isWhite, currentPosition, nextPosition) => {
     let validMove = false;
 
+    const yDifference = Math.abs(currentPosition.y - nextPosition.y);
+    const xDifference = Math.abs(currentPosition.x - nextPosition.x);
+
     switch (pieceType) {
       case pieceTypes.Pawn:
-        validMove = pawnRules(currentPosition, nextPosition, isWhite);
+        validMove = pawnRules(currentPosition, nextPosition, isWhite); //refactor
         break;
       case pieceTypes.Rook:
-        console.log("rook clicked");
+        validMove = rookRules(yDifference, xDifference);
         break;
       case pieceTypes.Knight:
-        validMove = knightRulesV2(currentPosition, nextPosition);
+        validMove = knightRules(yDifference, xDifference);
         break;
-      
+      case pieceTypes.Bishop:
+        validMove = bishopRules(yDifference, xDifference);
+        break;
+      case pieceTypes.King:
+        validMove = kingRules(yDifference, xDifference);
+        break;
+      case pieceTypes.Queen:
+        validMove = true;
+        break;
       default:
         break;
     }

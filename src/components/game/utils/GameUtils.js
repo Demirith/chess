@@ -22,34 +22,34 @@ export const pawnRules = (currentPosition, nextPosition, isWhite) => {
   }
 };
 
-export const knightRules = (currentPosition, nextPosition) => {
-  if (((currentPosition.y + 2) === nextPosition.y || (currentPosition.y - 2) === nextPosition.y) && (((currentPosition.x - 1) === nextPosition.x) || (currentPosition.x + 1) === nextPosition.x)) {
+export const knightRules = (yDifference, xDifference) => {
+  if ((xDifference === 2 && yDifference === 1) || (yDifference === 2 && xDifference === 1)) {
     return true;
-  } 
+  }
 
   return false;
 };
 
-export const knightRulesV2 = (currentPosition, nextPosition) => {
-  const yDifference = Math.abs(currentPosition.y - nextPosition.y);
-  const xDifference = Math.abs(currentPosition.x - nextPosition.x);
+export const bishopRules = (yDifference, xDifference) => {
+  const slope = Math.abs(yDifference / xDifference);
 
-/*  
-  let opposite;
-  let adjecent;
+  if (slope === 1) {
+    return true;
+  }
 
-  if (yDifference > xDifference) {
-    opposite = xDifference;
-    adjecent = yDifference;
-  } else {
-    opposite = yDifference;
-    adjecent = xDifference;
-  } */
+  return false;
+};
 
-  // hyp * cos(acos())
-  //const test = Math.sqrt(Math.pow(yDifference, 2) + Math.pow(xDifference, 2)) * Math.cos(Math.atan(opposite / adjecent));
+export const kingRules = (yDifference, xDifference) => {
+  if ((yDifference === 1 && xDifference === 0) || (xDifference === 1 && yDifference === 0) || (xDifference === 1 && yDifference === 1)) {
+    return true;
+  }
 
-  if ((xDifference === 2 && yDifference === 1) || (yDifference === 2 && xDifference === 1)) {
+  return false;
+};
+
+export const rookRules = (yDifference, xDifference) => {
+  if (yDifference === 0 || xDifference === 0) {
     return true;
   }
 
