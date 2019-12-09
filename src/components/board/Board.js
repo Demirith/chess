@@ -35,7 +35,7 @@ function Board(props) {
         const nextPosition = { x: clickedSquare.positionX, y: clickedSquare.positionY };
 
         //Update piece position
-        if(previousSelectedPiece && props.rules(previousSelectedPiece.type, previousSelectedPiece.isDefaultColor, currentPosition, nextPosition)) {
+        if(previousSelectedPiece && props.rules(previousSelectedPiece.type, previousSelectedPiece.isWhite, currentPosition, nextPosition)) {
           previousSelectedPiece.positionY = clickedSquare.positionY;
           previousSelectedPiece.positionX = clickedSquare.positionX;
 
@@ -51,7 +51,7 @@ function Board(props) {
 
   useEffect(() => {
     if (!initialized) {
-      let isDefaultColor = true;
+      let isWhite = true;
       const boardLetters = ["a", "b", "c", "d", "e", "f", "g", "h"];
       const boardNumbers = [8, 7, 6, 5, 4, 3, 2, 1];
       let boardIdLetterIndex = 0;
@@ -60,11 +60,11 @@ function Board(props) {
 
       for (let index = 1; index <= 64; index++) {
         const squareId = boardNumbers[boardIdNumbersIndex] + boardLetters[boardIdLetterIndex];
-        const newSquare = { id: squareId, isDefaultColor, isSelected: false, positionY: boardNumbers[boardIdNumbersIndex], positionX: boardIdLetterIndex + 1 };
+        const newSquare = { id: squareId, isWhite, isSelected: false, positionY: boardNumbers[boardIdNumbersIndex], positionX: boardIdLetterIndex + 1 };
         squaresArray.push(newSquare);
         
         if (!(index % 8 === 0)) {
-          isDefaultColor = !isDefaultColor;
+          isWhite = !isWhite;
           boardIdLetterIndex++;
         } else {
           boardIdNumbersIndex++;
@@ -83,10 +83,10 @@ function Board(props) {
         const piece = lastPieces.find(piece => Object.is(piece.positionY, square.positionY) && Object.is(piece.positionX, square.positionX));
 
         if (piece) {
-          const pieceComponent = <PieceComponent isDefaultColor={ piece.isDefaultColor } id={ piece.id } type={ piece.type } />;
-          return <Square key={ index } id={ square.id } isDefaultColor={ square.isDefaultColor } squareClicked={ squareClicked } isSelected={ square.isSelected } piece={ pieceComponent } />;
+          const pieceComponent = <PieceComponent isWhite={ piece.isWhite } id={ piece.id } type={ piece.type } />;
+          return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } piece={ pieceComponent } />;
         } else
-          return <Square key={ index } id={ square.id } isDefaultColor={ square.isDefaultColor } squareClicked={ squareClicked } isSelected={ square.isSelected } />;
+          return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } />;
       }));
 
   }, [props.pieces, squares, initialized, squareClicked]);

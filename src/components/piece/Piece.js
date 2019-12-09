@@ -26,9 +26,9 @@ function Pawn(props) {
         });
 
         if (pieceType)
-            setClassName(props.isDefaultColor ?  ("pieces pieces--" + pieceType) : ("pieces pieces--" + pieceType + "-black"));
+            setClassName(props.isWhite ?  ("pieces pieces--" + pieceType) : ("pieces pieces--" + pieceType + "-black"));
 
-    }, [props.isDefaultColor, props.id, props.type, pieceType]);
+    }, [props.isWhite, props.id, props.type, pieceType]);
 
     return (
         <span data-cy={ "piece" } className={ className }></span>
