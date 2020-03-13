@@ -18,7 +18,7 @@ code {
     monospace;
 }
 
-#root {
+#container {
   height: 100%;
   margin: 0;
 }
