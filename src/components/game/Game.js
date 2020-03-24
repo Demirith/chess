@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Game.css';
 import Board from "../board/Board";
-import VerticalDescription from "../verticalDescription/VerticalDescription";
-import HorizontalDescription from "../horizontalDescription/HorizontalDescription";
+import VerticalDescription from "../VerticalDescription/VerticalDescription";
+import HorizontalDescription from "../HorizontalDescription/HorizontalDescription";
 import { pawnRules, knightRules, bishopRules, kingRules, rookRules, getStartPosition, pieceTypes, checkPath } from "./GameUtils";
 import { ErrorContext } from "../errorBoundary/ErrorBoundary";
 

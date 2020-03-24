@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './Board.css';
-import Square from "../square/Square";
-import PieceComponent from "../piece/Piece";
+import Square from "../Square/Square";
+import PieceComponent from "../Piece/Piece";
 
 function Board(props) {
   const [squares, setSquares] = useState([]);

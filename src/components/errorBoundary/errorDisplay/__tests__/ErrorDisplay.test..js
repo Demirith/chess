@@ -7,9 +7,11 @@ import React from 'react';
 import {render, fireEvent, screen} from '@testing-library/react';
 import ErrorDisplay from '../ErrorDisplay';
 
-describe.only("ErrorDisplay", () => { 
-    test.only('shows the children when the checkbox is checked', () => {
+describe("ErrorDisplay", () => { 
+    test('shows the children when the checkbox is checked', () => {
         const errorMessage = "test message";
+        const expected = "Something went wrong: " + JSON.stringify({ "error": errorMessage });
+
         render(<ErrorDisplay error={ { error: errorMessage } } />);
       
         // query* functions will return the element or null if it cannot be found
@@ -21,6 +23,6 @@ describe.only("ErrorDisplay", () => {
       
         // .toBeInTheDocument() is an assertion that comes from jest-dom
         // otherwise you could use .toBeDefined()
-        expect(screen.getByText(errorMessage)).toBeInTheDocument()
+        expect(screen.getByText(expected)).toBeInTheDocument();
     })
 });

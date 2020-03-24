@@ -1,5 +1,5 @@
 import React from "react";
-import ErrorDisplay from "./errorDisplay/ErrorDisplay";
+import ErrorDisplay from "./ErrorDisplay/ErrorDisplay";
 export const ErrorContext = React.createContext();
 
 class ErrorBoundary extends React.Component {
