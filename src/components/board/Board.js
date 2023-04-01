@@ -4,7 +4,7 @@ import Square from "../Square/Square";
 import PieceComponent from "../Piece/Piece";
 import { ErrorContext } from "../ErrorBoundary/ErrorBoundary";
 
-function Board(props) {
+function Board({pieces, rules, setPieces }) {
   const [squares, setSquares] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState();
   const [initialized, setInitialized] = useState(false);
@@ -13,7 +13,7 @@ function Board(props) {
 
   const squareClicked = useCallback(
     (id) => {
-      const copyPieces = Array.from(props.pieces[props.pieces.length - 1]);
+      const copyPieces = Array.from(pieces[pieces.length - 1]);
       const copySquares = Array.from(squares);
       const clickedSquare = copySquares.find(square => square.id === id);
 
@@ -42,14 +42,14 @@ function Board(props) {
           //TODO: Store historical moves. State saved in game
 
           //Update piece position
-          if(previousSelectedPiece && props.rules(previousSelectedPiece.type, previousSelectedPiece.isWhite, currentPosition, nextPosition, props.pieces)) {
+          if(previousSelectedPiece && rules(previousSelectedPiece.type, previousSelectedPiece.isWhite, currentPosition, nextPosition, pieces)) {
             previousSelectedPiece.positionY = clickedSquare.positionY;
             previousSelectedPiece.positionX = clickedSquare.positionX;
   
             //copy pieces array and add new array of pieces
-            const copyPiecesArray = Array.from(props.pieces);
+            const copyPiecesArray = Array.from(pieces);
             copyPiecesArray.push(copyPieces);
-            props.setPieces(copyPiecesArray);
+            setPieces(copyPiecesArray);
           }
         } catch (error) {
           report(error);
@@ -57,7 +57,7 @@ function Board(props) {
 
       }
     },
-    [squares, props, selectedSquare]
+    [squares, selectedSquare, report, pieces, rules, setPieces]
   );
 
   useEffect(() => {
@@ -90,7 +90,7 @@ function Board(props) {
     setSquaresAndPieces(
       squares.map((square, index) => {
         //test what is the fastes way to get copy from last element in array
-        const lastPieces = Array.from(props.pieces[props.pieces.length - 1]);
+        const lastPieces = Array.from(pieces[pieces.length - 1]);
         const piece = lastPieces.find(piece => Object.is(piece.positionY, square.positionY) && Object.is(piece.positionX, square.positionX));
 
         if (piece) {
@@ -101,7 +101,7 @@ function Board(props) {
           return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } />;
       }));
 
-  }, [props.pieces, squares, initialized, squareClicked]);
+  }, [pieces, squares, initialized, squareClicked]);
 
   return (
     <div className="board">
