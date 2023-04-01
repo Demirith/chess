@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import Game from "./components/game/Game";
-import ErrorBoundary from "./components/errorBoundary/ErrorBoundary";
+import Game from "./components/Game/Game";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 function App() {
   return (

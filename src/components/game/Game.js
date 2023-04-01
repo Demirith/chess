@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Game.css';
-import Board from "../board/Board";
+import Board from "../Board/Board";
 import VerticalDescription from "../VerticalDescription/VerticalDescription";
 import HorizontalDescription from "../HorizontalDescription/HorizontalDescription";
 import { pawnRules, knightRules, bishopRules, kingRules, rookRules, getStartPosition, pieceTypes, checkPath } from "./GameUtils";
-import { ErrorContext } from "../errorBoundary/ErrorBoundary";
+import { ErrorContext } from "../ErrorBoundary/ErrorBoundary";
 
 function Game() {
   const [pieces, setPieces] = useState([]); //Rename to pieces history or position?
