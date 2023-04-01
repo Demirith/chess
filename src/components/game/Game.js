@@ -3,7 +3,7 @@ import './Game.css';
 import Board from "../Board/Board";
 import VerticalDescription from "../VerticalDescription/VerticalDescription";
 import HorizontalDescription from "../HorizontalDescription/HorizontalDescription";
-import { getStartPosition, rules } from "./GameUtils";
+import { getStartPosition } from "./GameUtils";
 
 function Game() {
   const [pieces, setPieces] = useState([]);
@@ -20,7 +20,7 @@ function Game() {
   return (
       <div className="game-wrapper">
           <VerticalDescription />
-          <Board pieces={ pieces } setPieces={ setPieces } rules={ rules } />
+          <Board pieces={ pieces } setPieces={ setPieces } />
           <HorizontalDescription />
       </div>
   );

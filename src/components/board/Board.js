@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import './Board.css';
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import "./Board.css";
 import Square from "../Square/Square";
 import PieceComponent from "../Piece/Piece";
+import { rules } from "../Piece/PiecesRules";
 import { ErrorContext } from "../ErrorBoundary/ErrorBoundary";
 
-function Board({pieces, rules, setPieces }) {
+function Board({ pieces, setPieces }) {
   const [squares, setSquares] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState();
   const [initialized, setInitialized] = useState(false);
@@ -15,37 +16,64 @@ function Board({pieces, rules, setPieces }) {
     (id) => {
       const copyPieces = Array.from(pieces[pieces.length - 1]);
       const copySquares = Array.from(squares);
-      const clickedSquare = copySquares.find(square => square.id === id);
+      const clickedSquare = copySquares.find((square) => square.id === id);
 
       //deselect previous selected square
       if (selectedSquare && selectedSquare !== id) {
-        const previousSelectedSquare = copySquares.find(previousSelectedSquare => previousSelectedSquare.id === selectedSquare.id);
+        const previousSelectedSquare = copySquares.find(
+          (previousSelectedSquare) =>
+            previousSelectedSquare.id === selectedSquare.id
+        );
         previousSelectedSquare.isSelected = false;
 
         setSquares(copySquares);
       }
-      
+
       //check if any piece is on clicked square
       //do not higlight if empty square
-      if (copyPieces.find(piece => Object.is(piece.positionY, clickedSquare.positionY) && Object.is(piece.positionX, clickedSquare.positionX))) {
+      if (
+        copyPieces.find(
+          (piece) =>
+            Object.is(piece.positionY, clickedSquare.positionY) &&
+            Object.is(piece.positionX, clickedSquare.positionX)
+        )
+      ) {
         clickedSquare.isSelected = !clickedSquare.isSelected;
         setSelectedSquare(clickedSquare);
-      } else if(selectedSquare) {
+      } else if (selectedSquare) {
         //get piece from previous square
-        const previousSelectedPiece = copyPieces.find(piece => Object.is(piece.positionY, selectedSquare.positionY) && Object.is(piece.positionX, selectedSquare.positionX));
-        const currentPosition = { x: selectedSquare.positionX, y: selectedSquare.positionY };
-        const nextPosition = { x: clickedSquare.positionX, y: clickedSquare.positionY };
+        const previousSelectedPiece = copyPieces.find(
+          (piece) =>
+            Object.is(piece.positionY, selectedSquare.positionY) &&
+            Object.is(piece.positionX, selectedSquare.positionX)
+        );
+        const currentPosition = {
+          x: selectedSquare.positionX,
+          y: selectedSquare.positionY,
+        };
+        const nextPosition = {
+          x: clickedSquare.positionX,
+          y: clickedSquare.positionY,
+        };
 
-        
         // TODO: clean up try catch. We want to catch any errors with the rules
         try {
           //TODO: Store historical moves. State saved in game
 
           //Update piece position
-          if(previousSelectedPiece && rules(previousSelectedPiece.type, previousSelectedPiece.isWhite, currentPosition, nextPosition, pieces)) {
+          if (
+            previousSelectedPiece &&
+            rules(
+              previousSelectedPiece.type,
+              previousSelectedPiece.isWhite,
+              currentPosition,
+              nextPosition,
+              pieces
+            )
+          ) {
             previousSelectedPiece.positionY = clickedSquare.positionY;
             previousSelectedPiece.positionX = clickedSquare.positionX;
-  
+
             //copy pieces array and add new array of pieces
             const copyPiecesArray = Array.from(pieces);
             copyPiecesArray.push(copyPieces);
@@ -54,10 +82,9 @@ function Board({pieces, rules, setPieces }) {
         } catch (error) {
           report(error);
         }
-
       }
     },
-    [squares, selectedSquare, report, pieces, rules, setPieces]
+    [squares, selectedSquare, report, pieces, setPieces]
   );
 
   useEffect(() => {
@@ -70,10 +97,17 @@ function Board({pieces, rules, setPieces }) {
       let squaresArray = [];
 
       for (let index = 1; index <= 64; index++) {
-        const squareId = boardNumbers[boardIdNumbersIndex] + boardLetters[boardIdLetterIndex];
-        const newSquare = { id: squareId, isWhite, isSelected: false, positionY: boardNumbers[boardIdNumbersIndex], positionX: boardIdLetterIndex + 1 };
+        const squareId =
+          boardNumbers[boardIdNumbersIndex] + boardLetters[boardIdLetterIndex];
+        const newSquare = {
+          id: squareId,
+          isWhite,
+          isSelected: false,
+          positionY: boardNumbers[boardIdNumbersIndex],
+          positionX: boardIdLetterIndex + 1,
+        };
         squaresArray.push(newSquare);
-        
+
         if (!(index % 8 === 0)) {
           isWhite = !isWhite;
           boardIdLetterIndex++;
@@ -91,25 +125,46 @@ function Board({pieces, rules, setPieces }) {
       squares.map((square, index) => {
         //test what is the fastes way to get copy from last element in array
         const lastPieces = Array.from(pieces[pieces.length - 1]);
-        const piece = lastPieces.find(piece => Object.is(piece.positionY, square.positionY) && Object.is(piece.positionX, square.positionX));
+        const piece = lastPieces.find(
+          (piece) =>
+            Object.is(piece.positionY, square.positionY) &&
+            Object.is(piece.positionX, square.positionX)
+        );
 
         if (piece) {
           // We could create specific Pieces instead. It would make it clearer.
-          const pieceComponent = <PieceComponent isWhite={ piece.isWhite } id={ piece.id } type={ piece.type } />; 
-          return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } piece={ pieceComponent } />;
+          const pieceComponent = (
+            <PieceComponent
+              isWhite={piece.isWhite}
+              id={piece.id}
+              type={piece.type}
+            />
+          );
+          return (
+            <Square
+              key={index}
+              id={square.id}
+              isWhite={square.isWhite}
+              squareClicked={squareClicked}
+              isSelected={square.isSelected}
+              piece={pieceComponent}
+            />
+          );
         } else
-          return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } />;
-      }));
-
+          return (
+            <Square
+              key={index}
+              id={square.id}
+              isWhite={square.isWhite}
+              squareClicked={squareClicked}
+              isSelected={square.isSelected}
+            />
+          );
+      })
+    );
   }, [pieces, squares, initialized, squareClicked]);
 
-  return (
-    <div className="board">
-      {
-        squaresAndPieces
-      }
-    </div>
-  );
+  return <div className="board">{squaresAndPieces}</div>;
 }
 
 export default Board;
