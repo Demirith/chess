@@ -69,17 +69,11 @@ export const rookRules = (yDifference, xDifference) => {
   return false;
 };
 
-export const checkPath = (
-  absoluteDifferenceY,
-  absoluteDifferenceX,
-  currentPositionY,
-  currentPositionX,
-  nextPositionY,
-  nextPositionX,
-  pieces
-) => {
-  const yDifference = nextPositionY - currentPositionY;
-  const xDifference = nextPositionX - currentPositionX;
+export const checkPath = (currentPosition, nextPosition, pieces) => {
+  const absoluteDifferenceY = Math.abs(currentPosition.y - nextPosition.y);
+  const absoluteDifferenceX = Math.abs(currentPosition.x - nextPosition.x);
+  const yDifference = nextPosition.y - currentPosition.y;
+  const xDifference = nextPosition.x - currentPosition.x;
   const pathTotalSteps =
     absoluteDifferenceY > absoluteDifferenceX ? yDifference : xDifference;
 
@@ -87,8 +81,8 @@ export const checkPath = (
     pathTotalSteps,
     absoluteDifferenceY,
     absoluteDifferenceX,
-    currentPositionY,
-    currentPositionX
+    currentPosition.y,
+    currentPosition.x
   );
   const hasPieceInSquare = checkSquares(squaresInPath, pieces);
 
@@ -156,7 +150,6 @@ export const pieceTypes = {
   King: 6,
 };
 
-// Only check if valid move for specific piece. Check if path in other function
 export const rules = (
   pieceType,
   isWhite,
@@ -175,15 +168,7 @@ export const rules = (
     case pieceTypes.Rook:
       validMove =
         rookRules(absoluteDifferenceY, absoluteDifferenceX) &&
-        checkPath(
-          absoluteDifferenceY,
-          absoluteDifferenceX,
-          currentPosition.y,
-          currentPosition.x,
-          nextPosition.y,
-          nextPosition.x,
-          pieces
-        );
+        checkPath(currentPosition, nextPosition, pieces);
       break;
     case pieceTypes.Knight:
       validMove = knightRules(absoluteDifferenceY, absoluteDifferenceX);

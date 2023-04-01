@@ -5,6 +5,19 @@ import PieceComponent from "../Piece/Piece";
 import { rules } from "../Piece/PiecesRules";
 import { ErrorContext } from "../ErrorBoundary/ErrorBoundary";
 
+const deselectSquareInArray = (squares, selectedSquare) => {
+  return squares.map((square) => {
+    if (square.id === selectedSquare.id) {
+      return { ...square, isSelected: false };
+    } else {
+      return square;
+    }
+  });
+};
+
+const shouldDeselectPreviousSquare = (selectedSquare, id) =>
+  selectedSquare && selectedSquare !== id;
+
 function Board({ pieces, setPieces }) {
   const [squares, setSquares] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState();
@@ -15,17 +28,10 @@ function Board({ pieces, setPieces }) {
   const squareClicked = useCallback(
     (id) => {
       const copyPieces = Array.from(pieces[pieces.length - 1]);
-      const copySquares = Array.from(squares);
-      const clickedSquare = copySquares.find((square) => square.id === id);
+      const clickedSquare = squares.find((square) => square.id === id);
 
-      //deselect previous selected square
-      if (selectedSquare && selectedSquare !== id) {
-        const previousSelectedSquare = copySquares.find(
-          (previousSelectedSquare) =>
-            previousSelectedSquare.id === selectedSquare.id
-        );
-        previousSelectedSquare.isSelected = false;
-
+      if (shouldDeselectPreviousSquare(selectedSquare, id)) {
+        const copySquares = deselectSquareInArray(squares, selectedSquare);
         setSquares(copySquares);
       }
 
