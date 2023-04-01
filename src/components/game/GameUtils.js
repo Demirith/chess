@@ -149,3 +149,45 @@ export const pieceTypes = {
   Queen: 5,
   King: 6
 };
+
+export const rules = (pieceType, isWhite, currentPosition, nextPosition, pieces) => {
+  let validMove = false;
+
+    const absoluteDifferenceY = Math.abs(currentPosition.y - nextPosition.y);
+    const absoluteDifferenceX = Math.abs(currentPosition.x - nextPosition.x);
+
+    switch (pieceType) {
+      case pieceTypes.Pawn:
+        validMove = pawnRules(currentPosition, nextPosition, isWhite); //refactor
+        break;
+      case pieceTypes.Rook:
+        validMove =
+          rookRules(absoluteDifferenceY, absoluteDifferenceX) &&
+          checkPath(
+            absoluteDifferenceY,
+            absoluteDifferenceX,
+            currentPosition.y,
+            currentPosition.x,
+            nextPosition.y,
+            nextPosition.x,
+            pieces
+          );
+        break;
+      case pieceTypes.Knight:
+        validMove = knightRules(absoluteDifferenceY, absoluteDifferenceX);
+        break;
+      case pieceTypes.Bishop:
+        validMove = bishopRules(absoluteDifferenceY, absoluteDifferenceX);
+        break;
+      case pieceTypes.King:
+        validMove = kingRules(absoluteDifferenceY, absoluteDifferenceX);
+        break;
+      case pieceTypes.Queen: // TODO: not done. Passing throught pieces
+        validMove = true;
+        break;
+      default:
+        break;
+    }
+
+  return validMove;
+};

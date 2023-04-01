@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import './Board.css';
 import Square from "../Square/Square";
 import PieceComponent from "../Piece/Piece";
+import { ErrorContext } from "../ErrorBoundary/ErrorBoundary";
 
 function Board(props) {
   const [squares, setSquares] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState();
   const [initialized, setInitialized] = useState(false);
   const [squaresAndPieces, setSquaresAndPieces] = useState([]);
+  const report = useContext(ErrorContext);
 
   const squareClicked = useCallback(
     (id) => {
@@ -34,16 +36,25 @@ function Board(props) {
         const currentPosition = { x: selectedSquare.positionX, y: selectedSquare.positionY };
         const nextPosition = { x: clickedSquare.positionX, y: clickedSquare.positionY };
 
-        //Update piece position
-        if(previousSelectedPiece && props.rules(previousSelectedPiece.type, previousSelectedPiece.isWhite, currentPosition, nextPosition)) {
-          previousSelectedPiece.positionY = clickedSquare.positionY;
-          previousSelectedPiece.positionX = clickedSquare.positionX;
+        
+        // TODO: clean up try catch. We want to catch any errors with the rules
+        try {
+          //TODO: Store historical moves. State saved in game
 
-          //copy pieces array and add new array of pieces
-          const copyPiecesArray = Array.from(props.pieces);
-          copyPiecesArray.push(copyPieces);
-          props.setPieces(copyPiecesArray);
+          //Update piece position
+          if(previousSelectedPiece && props.rules(previousSelectedPiece.type, previousSelectedPiece.isWhite, currentPosition, nextPosition, props.pieces)) {
+            previousSelectedPiece.positionY = clickedSquare.positionY;
+            previousSelectedPiece.positionX = clickedSquare.positionX;
+  
+            //copy pieces array and add new array of pieces
+            const copyPiecesArray = Array.from(props.pieces);
+            copyPiecesArray.push(copyPieces);
+            props.setPieces(copyPiecesArray);
+          }
+        } catch (error) {
+          report(error);
         }
+
       }
     },
     [squares, props, selectedSquare]
@@ -83,7 +94,8 @@ function Board(props) {
         const piece = lastPieces.find(piece => Object.is(piece.positionY, square.positionY) && Object.is(piece.positionX, square.positionX));
 
         if (piece) {
-          const pieceComponent = <PieceComponent isWhite={ piece.isWhite } id={ piece.id } type={ piece.type } />;
+          // We could create specific Pieces instead. It would make it clearer.
+          const pieceComponent = <PieceComponent isWhite={ piece.isWhite } id={ piece.id } type={ piece.type } />; 
           return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } piece={ pieceComponent } />;
         } else
           return <Square key={ index } id={ square.id } isWhite={ square.isWhite } squareClicked={ squareClicked } isSelected={ square.isSelected } />;

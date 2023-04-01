@@ -1,7 +1,8 @@
 import React, { useState, useEffect }  from 'react';
 import './Piece.css';
 
-function Pawn(props) {
+// Rename? What does this function do? It returns a piece type based on type passed in? Is this realy a piece or more some util function? 
+function Pawn(props) { 
     const [pieceType, setPieceType] = useState();
     const [className, setClassName] = useState();
 
