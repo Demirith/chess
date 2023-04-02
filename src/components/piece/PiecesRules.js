@@ -155,35 +155,40 @@ export const rules = (
   isWhite,
   currentPosition,
   nextPosition,
-  pieces
+  pieces,
+  report
 ) => {
   let validMove = false;
   const absoluteDifferenceY = Math.abs(currentPosition.y - nextPosition.y);
   const absoluteDifferenceX = Math.abs(currentPosition.x - nextPosition.x);
 
-  switch (pieceType) {
-    case pieceTypes.Pawn:
-      validMove = pawnRules(currentPosition, nextPosition, isWhite); //refactor // TODO: not done. Passing throught pieces
-      break;
-    case pieceTypes.Rook:
-      validMove =
-        rookRules(absoluteDifferenceY, absoluteDifferenceX) &&
-        checkPath(currentPosition, nextPosition, pieces);
-      break;
-    case pieceTypes.Knight:
-      validMove = knightRules(absoluteDifferenceY, absoluteDifferenceX);
-      break;
-    case pieceTypes.Bishop: // TODO: not done. Passing throught pieces
-      validMove = bishopRules(absoluteDifferenceY, absoluteDifferenceX);
-      break;
-    case pieceTypes.King:
-      validMove = kingRules(absoluteDifferenceY, absoluteDifferenceX);
-      break;
-    case pieceTypes.Queen: // TODO: not done. Passing throught pieces
-      validMove = true;
-      break;
-    default:
-      break;
+  try {
+    switch (pieceType) {
+      case pieceTypes.Pawn:
+        validMove = pawnRules(currentPosition, nextPosition, isWhite); //refactor // TODO: not done. Passing throught pieces
+        break;
+      case pieceTypes.Rook:
+        validMove =
+          rookRules(absoluteDifferenceY, absoluteDifferenceX) &&
+          checkPath(currentPosition, nextPosition, pieces);
+        break;
+      case pieceTypes.Knight:
+        validMove = knightRules(absoluteDifferenceY, absoluteDifferenceX);
+        break;
+      case pieceTypes.Bishop: // TODO: not done. Passing throught pieces
+        validMove = bishopRules(absoluteDifferenceY, absoluteDifferenceX);
+        break;
+      case pieceTypes.King:
+        validMove = kingRules(absoluteDifferenceY, absoluteDifferenceX);
+        break;
+      case pieceTypes.Queen: // TODO: not done. Passing throught pieces
+        validMove = true;
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    report(error);
   }
 
   return validMove;
