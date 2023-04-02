@@ -15,8 +15,26 @@ const deselectSquareInArray = (squares, selectedSquare) => {
   });
 };
 
+const selectSquareInArray = (squares, clickedSquare) => {
+  return squares.map((square) => {
+    if (square.id === clickedSquare.id) {
+      return { ...square, isSelected: true };
+    } else {
+      return square;
+    }
+  });
+};
+
 const shouldDeselectPreviousSquare = (selectedSquare, id) =>
   selectedSquare && selectedSquare !== id;
+
+const shouldHighlightSquare = (copyPieces, clickedSquare) => {
+  return copyPieces.find(
+    (piece) =>
+      Object.is(piece.positionY, clickedSquare.positionY) &&
+      Object.is(piece.positionX, clickedSquare.positionX)
+  );
+};
 
 function Board({ pieces, setPieces }) {
   const [squares, setSquares] = useState([]);
@@ -31,21 +49,23 @@ function Board({ pieces, setPieces }) {
       const clickedSquare = squares.find((square) => square.id === id);
 
       if (shouldDeselectPreviousSquare(selectedSquare, id)) {
-        const copySquares = deselectSquareInArray(squares, selectedSquare);
-        setSquares(copySquares);
+        const copyWithDeselectedSquares = deselectSquareInArray(
+          squares,
+          selectedSquare
+        );
+        setSquares(copyWithDeselectedSquares);
+        setSelectedSquare(null);
       }
 
-      //check if any piece is on clicked square
-      //do not higlight if empty square
-      if (
-        copyPieces.find(
-          (piece) =>
-            Object.is(piece.positionY, clickedSquare.positionY) &&
-            Object.is(piece.positionX, clickedSquare.positionX)
-        )
-      ) {
-        clickedSquare.isSelected = !clickedSquare.isSelected;
-        setSelectedSquare(clickedSquare);
+      if (shouldHighlightSquare(copyPieces, clickedSquare)) {
+        const newSelectedSquare = { ...clickedSquare, isSelected: true };
+        const copyWithSelectedSquares = selectSquareInArray(
+          squares,
+          clickedSquare
+        );
+
+        setSquares(copyWithSelectedSquares);
+        setSelectedSquare(newSelectedSquare);
       } else if (selectedSquare) {
         //get piece from previous square
         const previousSelectedPiece = copyPieces.find(
