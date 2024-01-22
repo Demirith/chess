@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Game.css";
-import Board from "../Board/Board";
-import VerticalDescription from "../VerticalDescription/VerticalDescription";
-import HorizontalDescription from "../HorizontalDescription/HorizontalDescription";
+import Board from "../board/Board";
+import VerticalDescription from "../verticalDescription/VerticalDescription";
+import HorizontalDescription from "../horizontalDescription/HorizontalDescription";
 import { getStartPosition } from "./GameUtils";
 
 function Game() {

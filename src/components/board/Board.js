@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import "./Board.css";
-import Square from "../Square/Square";
-import PieceComponent from "../Piece/Piece";
-import { rules } from "../Piece/PiecesRules";
-import { ErrorContext } from "../ErrorBoundary/ErrorBoundary";
+import Square from "../square/Square";
+import PieceComponent from "../piece/Piece";
+import { rules } from "../piece/PiecesRules";
+import { ErrorContext } from "../errorBoundary/ErrorBoundary";
 
 const deselectSquareInArray = (squares, selectedSquare) => {
   return squares.map((square) => {
