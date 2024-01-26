@@ -34,7 +34,7 @@ describe("Path validation", () => {
         const nerxtPostition = { y: 1, x: 3 }
 
         const pieces = [getStartPosition]; // create test senario 
-        let validMove = false;
+        let validMove = true;
 
         //Act 
         validMove = checkPath(currentPosition, nerxtPostition, pieces);
@@ -44,24 +44,18 @@ describe("Path validation", () => {
     });
 
 
-    test.skip("Should not be a valid move if piece is in path and moving diagonally", () => {
+    test("Should not be a valid move if piece is in path and moving diagonally from y1, x3 to y:3, x5 and there is a piece at y2, x4", () => {
         //Arrange
-        const absoluteDifferenceY = 2;
-        const absoluteDifferenceX = 2;
+        const currentPosition = { y: 1, x: 3 }
+        const nerxtPostition = { y: 3, x: 5 }
 
-        const currentPositionY = 1;
-        const currentPositionX = 3;
-
-        const nextPositionY = 3;
-        const nextPositionX = 5;
-
-        const pieces = [getStartPosition];  //create test senario 
-        let validMove = false;
+        const pieces = [getStartPosition];  
+        let validMove = true;
 
         //Act 
-        validMove = checkPath(absoluteDifferenceY, absoluteDifferenceX, currentPositionY, currentPositionX, nextPositionY, nextPositionX, pieces);
+        validMove = checkPath(currentPosition, nerxtPostition, pieces);
         
         //Assert
-        expect(true).toBe(false);
+        expect(validMove).toBe(false);
     });
 });

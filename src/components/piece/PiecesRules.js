@@ -103,12 +103,12 @@ const getSquersInPath = (
 
   while (step !== pathTotalSteps) {
     const y =
-      absoluteDifferenceY > absoluteDifferenceX
-        ? currentPositionY + step
+      (absoluteDifferenceY + currentPositionY) > currentPositionY
+        ? currentPositionY + 1
         : currentPositionY;
     const x =
-      absoluteDifferenceX > absoluteDifferenceY
-        ? currentPositionX + step
+      (absoluteDifferenceX + currentPositionX) > currentPositionX
+        ? currentPositionX + 1
         : currentPositionX;
 
     squaresInPath.push({ y, x });
