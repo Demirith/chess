@@ -84,9 +84,10 @@ export const checkPath = (currentPosition, nextPosition, pieces) => {
     currentPosition.y,
     currentPosition.x
   );
-  const hasPieceInSquare = checkSquares(squaresInPath, pieces);
 
-  return hasPieceInSquare;
+  const hasClearPath = checkSquares(squaresInPath, pieces)
+
+  return hasClearPath;
 };
 
 const getSquersInPath = (
@@ -176,7 +177,8 @@ export const rules = (
         validMove = knightRules(absoluteDifferenceY, absoluteDifferenceX);
         break;
       case pieceTypes.Bishop: // TODO: not done. Passing throught pieces
-        validMove = bishopRules(absoluteDifferenceY, absoluteDifferenceX);
+        validMove = bishopRules(absoluteDifferenceY, absoluteDifferenceX) &&
+        checkPath(currentPosition, nextPosition, pieces);
         break;
       case pieceTypes.King:
         validMove = kingRules(absoluteDifferenceY, absoluteDifferenceX);
