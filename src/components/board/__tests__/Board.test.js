@@ -10,9 +10,9 @@ afterEach(cleanup);
 const squareIndexFor = (positionY, positionX) =>
   (8 - positionY) * 8 + (positionX - 1);
 
-function TestGame() {
-  const [pieces, setPieces] = useState([getStartPosition]);
-  const [isWhiteTurn, setIsWhiteTurn] = useState(true);
+function TestGame({ initialPieces = getStartPosition, initialIsWhiteTurn = true }) {
+  const [pieces, setPieces] = useState([initialPieces]);
+  const [isWhiteTurn, setIsWhiteTurn] = useState(initialIsWhiteTurn);
 
   return (
     <>
@@ -106,5 +106,47 @@ describe("Board turn enforcement", () => {
 
     //Assert
     expect(getByTestId("turn").textContent).toBe("white");
+  });
+});
+
+describe("Board capture logic", () => {
+  const rookVsPawn = [
+    { id: "rookA", isWhite: true, type: 2, positionY: 1, positionX: 1 },
+    { id: "pawnB", isWhite: false, type: 1, positionY: 1, positionX: 4 },
+  ];
+
+  test("capturing an opponent piece removes it from the board", () => {
+    //Arrange
+    const { container } = render(<TestGame initialPieces={rookVsPawn} />);
+
+    //Act - white rook (1,1) captures black pawn (1,4)
+    clickSquare(container, 1, 1);
+    clickSquare(container, 1, 4);
+
+    //Assert - exactly one piece on the board, and it's white, at the captured square
+    const pieceEls = container.querySelectorAll('[data-cy="piece"]');
+    expect(pieceEls.length).toBe(1);
+
+    const destinationSquare = container.querySelectorAll('[data-cy="square"]')[
+      squareIndexFor(1, 4)
+    ];
+    expect(destinationSquare.querySelector('[data-cy="piece"]')).not.toBeNull();
+  });
+
+  test("cannot select-and-move onto your own piece", () => {
+    //Arrange
+    const ownPieces = [
+      { id: "rookA", isWhite: true, type: 2, positionY: 1, positionX: 1 },
+      { id: "pawnA", isWhite: true, type: 1, positionY: 1, positionX: 4 },
+    ];
+    const { container } = render(<TestGame initialPieces={ownPieces} />);
+
+    //Act - select the rook, then click the square with your own pawn
+    clickSquare(container, 1, 1);
+    clickSquare(container, 1, 4);
+
+    //Assert - both pieces still present, nothing was removed or overlapped
+    const pieceEls = container.querySelectorAll('[data-cy="piece"]');
+    expect(pieceEls.length).toBe(2);
   });
 });

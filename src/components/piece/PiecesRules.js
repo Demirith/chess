@@ -1,27 +1,35 @@
-export const pawnRules = (currentPosition, nextPosition, isWhite) => {
+export const pawnRules = (currentPosition, nextPosition, isWhite, isCapture) => {
+  const xDifference = Math.abs(currentPosition.x - nextPosition.x);
+
   if (isWhite) {
-    if (
-      currentPosition.y < nextPosition.y &&
-      currentPosition.x === nextPosition.x
-    ) {
-      if (currentPosition.y === 2 && nextPosition.y <= 4) {
+    if (xDifference === 0 && currentPosition.y < nextPosition.y) {
+      if (isCapture) {
+        return false;
+      } else if (currentPosition.y === 2 && nextPosition.y <= 4) {
         return true;
       } else if (currentPosition.y + 1 === nextPosition.y) {
         return true;
       }
     }
 
+    if (xDifference === 1 && nextPosition.y - currentPosition.y === 1) {
+      return isCapture;
+    }
+
     return false;
   } else {
-    if (
-      currentPosition.y > nextPosition.y &&
-      currentPosition.x === nextPosition.x
-    ) {
-      if (currentPosition.y === 7 && nextPosition.y >= 5) {
+    if (xDifference === 0 && currentPosition.y > nextPosition.y) {
+      if (isCapture) {
+        return false;
+      } else if (currentPosition.y === 7 && nextPosition.y >= 5) {
         return true;
       } else if (currentPosition.y - 1 === nextPosition.y) {
         return true;
       }
+    }
+
+    if (xDifference === 1 && currentPosition.y - nextPosition.y === 1) {
+      return isCapture;
     }
 
     return false;
@@ -123,6 +131,22 @@ const getSquersInPath = (
   return squaresInPath;
 };
 
+const isOwnPieceAt = (position, isWhite, pieces) =>
+  Array.from(pieces[pieces.length - 1]).some(
+    (piece) =>
+      piece.positionY === position.y &&
+      piece.positionX === position.x &&
+      piece.isWhite === isWhite
+  );
+
+const isOpponentPieceAt = (position, isWhite, pieces) =>
+  Array.from(pieces[pieces.length - 1]).some(
+    (piece) =>
+      piece.positionY === position.y &&
+      piece.positionX === position.x &&
+      piece.isWhite !== isWhite
+  );
+
 const checkSquares = (squaresInPath, pieces) => {
   let isValidPath = true;
 
@@ -164,9 +188,18 @@ export const rules = (
   const absoluteDifferenceX = Math.abs(currentPosition.x - nextPosition.x);
 
   try {
+    if (isOwnPieceAt(nextPosition, isWhite, pieces)) {
+      return false;
+    }
+
     switch (pieceType) {
       case pieceTypes.Pawn:
-        validMove = pawnRules(currentPosition, nextPosition, isWhite); //refactor // TODO: not done. Passing throught pieces
+        validMove = pawnRules(
+          currentPosition,
+          nextPosition,
+          isWhite,
+          isOpponentPieceAt(nextPosition, isWhite, pieces)
+        );
         break;
       case pieceTypes.Rook:
         validMove =
