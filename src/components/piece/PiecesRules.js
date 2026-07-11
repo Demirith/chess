@@ -70,54 +70,23 @@ export const rookRules = (yDifference, xDifference) => {
 };
 
 export const checkPath = (currentPosition, nextPosition, pieces) => {
-  const absoluteDifferenceY = Math.abs(currentPosition.y - nextPosition.y);
-  const absoluteDifferenceX = Math.abs(currentPosition.x - nextPosition.x);
-  const yDifference = nextPosition.y - currentPosition.y;
-  const xDifference = nextPosition.x - currentPosition.x;
-  const pathTotalSteps =
-    absoluteDifferenceY > absoluteDifferenceX ? yDifference : xDifference;
+  const squaresInPath = getSquersInPath(currentPosition, nextPosition);
 
-  const squaresInPath = getSquersInPath(
-    pathTotalSteps,
-    absoluteDifferenceY,
-    absoluteDifferenceX,
-    currentPosition.y,
-    currentPosition.x
-  );
-
-  const hasClearPath = checkSquares(squaresInPath, pieces)
-
-  return hasClearPath;
+  return checkSquares(squaresInPath, pieces);
 };
 
-const getSquersInPath = (
-  pathTotalSteps,
-  absoluteDifferenceY,
-  absoluteDifferenceX,
-  currentPositionY,
-  currentPositionX
-) => {
+const getSquersInPath = (currentPosition, nextPosition) => {
+  const yStep = Math.sign(nextPosition.y - currentPosition.y);
+  const xStep = Math.sign(nextPosition.x - currentPosition.x);
+
   const squaresInPath = [];
-  const isPositiveSteps = pathTotalSteps > 0;
-  let step = isPositiveSteps ? 1 : -1;
+  let y = currentPosition.y + yStep;
+  let x = currentPosition.x + xStep;
 
-  while (step !== pathTotalSteps) {
-    const y =
-      (absoluteDifferenceY + currentPositionY) > currentPositionY
-        ? currentPositionY + 1
-        : currentPositionY;
-    const x =
-      (absoluteDifferenceX + currentPositionX) > currentPositionX
-        ? currentPositionX + 1
-        : currentPositionX;
-
+  while (y !== nextPosition.y || x !== nextPosition.x) {
     squaresInPath.push({ y, x });
-
-    if (isPositiveSteps) {
-      step++;
-    } else {
-      step--;
-    }
+    y += yStep;
+    x += xStep;
   }
 
   return squaresInPath;
@@ -183,8 +152,11 @@ export const rules = (
       case pieceTypes.King:
         validMove = kingRules(absoluteDifferenceY, absoluteDifferenceX);
         break;
-      case pieceTypes.Queen: // TODO: not done. Passing throught pieces
-        validMove = true;
+      case pieceTypes.Queen:
+        validMove =
+          (rookRules(absoluteDifferenceY, absoluteDifferenceX) ||
+            bishopRules(absoluteDifferenceY, absoluteDifferenceX)) &&
+          checkPath(currentPosition, nextPosition, pieces);
         break;
       default:
         break;
