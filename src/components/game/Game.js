@@ -8,6 +8,7 @@ import { getStartPosition } from "./GameUtils";
 function Game() {
   const [pieces, setPieces] = useState([]); //why array with an array?
   const [initialized, setInitialized] = useState(false);
+  const [isWhiteTurn, setIsWhiteTurn] = useState(true);
 
   useEffect(() => {
     if (!initialized) {
@@ -19,7 +20,12 @@ function Game() {
   return (
     <div className="game-wrapper">
       <VerticalDescription />
-      <Board pieces={pieces} setPieces={setPieces} />
+      <Board
+        pieces={pieces}
+        setPieces={setPieces}
+        isWhiteTurn={isWhiteTurn}
+        setIsWhiteTurn={setIsWhiteTurn}
+      />
       <HorizontalDescription />
     </div>
   );

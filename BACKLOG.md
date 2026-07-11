@@ -31,7 +31,7 @@ bottom as a future "Could" tier, not committed to).
 ### T1 — Turn enforcement
 Right now either color can move any piece at any time. Need to track whose turn
 it is and reject moves by the wrong color.
-**Status:** Ready
+**Status:** Done
 
 **Acceptance criteria:**
 - A new game starts with white to move.

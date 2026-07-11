@@ -42,11 +42,12 @@ const updatePieceInArray = (previousSelectedPiece, clickedSquare, pieces) => {
 const shouldDeselectPreviousSquare = (selectedSquare, id) =>
   selectedSquare && selectedSquare !== id;
 
-const shouldHighlightSquare = (copyPieces, clickedSquare) => {
+const shouldHighlightSquare = (copyPieces, clickedSquare, isWhiteTurn) => {
   return copyPieces.find(
     (piece) =>
       Object.is(piece.positionY, clickedSquare.positionY) &&
-      Object.is(piece.positionX, clickedSquare.positionX)
+      Object.is(piece.positionX, clickedSquare.positionX) &&
+      Object.is(piece.isWhite, isWhiteTurn)
   );
 };
 
@@ -78,7 +79,7 @@ const shouldMovePiece = ({
   );
 };
 
-function Board({ pieces, setPieces }) {
+function Board({ pieces, setPieces, isWhiteTurn, setIsWhiteTurn }) {
   const [squares, setSquares] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState();
   const [initialized, setInitialized] = useState(false);
@@ -100,7 +101,7 @@ function Board({ pieces, setPieces }) {
         setSelectedSquare(null);
       }
 
-      if (shouldHighlightSquare(copyPieces, clickedSquare)) {
+      if (shouldHighlightSquare(copyPieces, clickedSquare, isWhiteTurn)) {
         const newSelectedSquare = { ...clickedSquare, isSelected: true };
         const copyWithSelectedSquares = selectSquareInArray(
           squares,
@@ -141,10 +142,11 @@ function Board({ pieces, setPieces }) {
           );
 
           setPieces([copyPiecesArrayWithNewPosition]); // Why array in array?
+          setIsWhiteTurn(!isWhiteTurn);
         }
       }
     },
-    [squares, selectedSquare, report, pieces, setPieces]
+    [squares, selectedSquare, report, pieces, setPieces, isWhiteTurn, setIsWhiteTurn]
   );
 
   useEffect(() => {
