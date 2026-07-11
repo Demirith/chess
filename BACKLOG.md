@@ -112,3 +112,26 @@ above land, so the repo doesn't overclaim or underclaim what it does.
 - En passant
 - UI: turn indicator, legal-move highlighting, check/checkmate banner
 - Move undo/redo (would build on T4's cleaner state model)
+
+---
+
+## Tech debt (tracked, not scheduled)
+
+### TD1 — Dependency & tooling refresh
+The project is old and unmaintained: GitHub/Dependabot currently flags 105
+vulnerabilities on the default branch (5 critical, 48 high, 39 moderate, 13
+low). `npm install` requires skipping the Cypress binary download to
+succeed in this environment, and `react-scripts start` (dev server hot
+reload) fails here on an unrelated `react-refresh` module-resolution error —
+`npm run build` (production) compiles and runs fine, so this looks tooling/
+environment-specific rather than a code problem, but it needs a real
+investigation, not an assumption.
+
+react-scripts (Create React App) itself has had no major release in years,
+so "update dependencies" may not be a simple `npm audit fix` — it could mean
+migrating off CRA (e.g., to Vite) to land on something still maintained.
+Scope and approach need discovery before this becomes a real, sized ticket.
+
+**Status:** Backlog — not scheduled this pass. Revisit if outdated tooling
+starts actively blocking the Must/Should chess-rules work, or after that
+scope is done.
