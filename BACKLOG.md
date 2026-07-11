@@ -31,7 +31,22 @@ bottom as a future "Could" tier, not committed to).
 ### T1 — Turn enforcement
 Right now either color can move any piece at any time. Need to track whose turn
 it is and reject moves by the wrong color.
-**Status:** Spec needed
+**Status:** Ready
+
+**Acceptance criteria:**
+- A new game starts with white to move.
+- Clicking/selecting a piece that does not belong to the player whose turn it
+  is results in a silent no-op: no selection, no error, no state change.
+- When a move by the correct-turn player is accepted by the existing move
+  rules (`PiecesRules.js`), turn switches to the other color immediately
+  after the piece's position updates.
+- An illegal move attempt (already rejected today by move rules, e.g. a bad
+  knight move) does not change whose turn it is.
+
+**Out of scope:**
+- Any visible UI indicator of whose turn it is — logic/state only this ticket.
+- Any change to per-piece movement legality itself (queen rules, capture
+  logic, etc. are separate tickets).
 
 ### T2 — Capture logic
 Moving onto a square with an opposing piece doesn't remove that piece from the
