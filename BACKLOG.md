@@ -52,12 +52,44 @@ it is and reject moves by the wrong color.
 Moving onto a square with an opposing piece doesn't remove that piece from the
 board (both pieces end up overlapping). Moving onto a square with your own piece
 is currently allowed and should be blocked.
-**Status:** Spec needed
+**Status:** Ready
+
+**Acceptance criteria:**
+- Moving a piece onto a square occupied by an opponent's piece, where the move
+  is otherwise legal for that piece type, removes the opponent's piece and the
+  moving piece takes its place (no overlap).
+- `rules()` rejects any move onto a square occupied by a piece of your own
+  color, regardless of piece type. This is a defense-in-depth check inside
+  `PiecesRules.js` itself (not just relying on the Board.js click-handling
+  behavior from T1, which already avoids attempting such a move via
+  reselection).
+- Pawn rules are extended to allow capturing: a pawn may move one square
+  diagonally forward (toward the opponent's side) only when an opponent's
+  piece occupies that square. This is in addition to the existing
+  straight-forward movement, which still never captures.
+- A pawn may not move diagonally onto an empty square.
+- Existing path-blocking behavior for rook/bishop is unaffected: the square
+  being moved *to* is not itself checked as part of the blocked path (only
+  squares strictly in between), so capturing at the end of a clear path
+  continues to work.
+
+**Out of scope:**
+- En passant (already logged separately in the "Could" tier).
+- Any change to check/checkmate detection.
 
 ### T3 — Queen movement rules
 `PiecesRules.js` hardcodes `validMove = true` for the queen — no validation at
 all. Needs real rules (rook + bishop movement combined) with path-blocking.
-**Status:** Spec needed
+**Status:** Ready
+
+**Acceptance criteria:**
+- A queen move is legal if it satisfies rook movement rules (straight line)
+  OR bishop movement rules (diagonal) — reusing `rookRules`/`bishopRules`
+  directly rather than duplicating the logic.
+- The path between the queen's current and destination square must be clear,
+  reusing the existing `checkPath` function, same as rook/bishop.
+- Queen moves are subject to the same same-color/capture handling as every
+  other piece (from T2) — no queen-specific exception.
 
 ---
 
