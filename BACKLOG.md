@@ -52,7 +52,7 @@ it is and reject moves by the wrong color.
 Moving onto a square with an opposing piece doesn't remove that piece from the
 board (both pieces end up overlapping). Moving onto a square with your own piece
 is currently allowed and should be blocked.
-**Status:** Ready
+**Status:** Done
 
 **Acceptance criteria:**
 - Moving a piece onto a square occupied by an opponent's piece, where the move
@@ -80,7 +80,7 @@ is currently allowed and should be blocked.
 ### T3 — Queen movement rules
 `PiecesRules.js` hardcodes `validMove = true` for the queen — no validation at
 all. Needs real rules (rook + bishop movement combined) with path-blocking.
-**Status:** Ready
+**Status:** Done
 
 **Acceptance criteria:**
 - A queen move is legal if it satisfies rook movement rules (straight line)
@@ -90,6 +90,12 @@ all. Needs real rules (rook + bishop movement combined) with path-blocking.
   reusing the existing `checkPath` function, same as rook/bishop.
 - Queen moves are subject to the same same-color/capture handling as every
   other piece (from T2) — no queen-specific exception.
+
+**Shipped alongside this ticket:** a pre-existing bug in `checkPath` (it only
+ever checked the square adjacent to the start, so blockers 2+ squares away
+went undetected — silently affecting rook/bishop too, not just queen). Fixed
+in the same PR since T3's AC directly depended on `checkPath` working
+correctly; flagged and agreed before fixing rather than assumed.
 
 ---
 
