@@ -26,17 +26,24 @@ const selectSquareInArray = (squares, clickedSquare) => {
 };
 
 const updatePieceInArray = (previousSelectedPiece, clickedSquare, pieces) => {
-  return pieces.map((piece) => {
-    if (piece.id === previousSelectedPiece.id) {
-      return {
-        ...piece,
-        positionY: clickedSquare.positionY,
-        positionX: clickedSquare.positionX,
-      };
-    } else {
-      return piece;
-    }
-  });
+  return pieces
+    .filter(
+      (piece) =>
+        piece.id === previousSelectedPiece.id ||
+        piece.positionY !== clickedSquare.positionY ||
+        piece.positionX !== clickedSquare.positionX
+    )
+    .map((piece) => {
+      if (piece.id === previousSelectedPiece.id) {
+        return {
+          ...piece,
+          positionY: clickedSquare.positionY,
+          positionX: clickedSquare.positionX,
+        };
+      } else {
+        return piece;
+      }
+    });
 };
 
 const shouldDeselectPreviousSquare = (selectedSquare, id) =>
