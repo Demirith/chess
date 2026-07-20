@@ -25,7 +25,7 @@ const selectSquareInArray = (squares, clickedSquare) => {
   });
 };
 
-const updatePieceInArray = (previousSelectedPiece, clickedSquare, pieces) => {
+const applyMoveToPieces = (previousSelectedPiece, clickedSquare, pieces) => {
   return pieces
     .filter(
       (piece) =>
@@ -142,7 +142,7 @@ function Board({ pieces, setPieces, isWhiteTurn, setIsWhiteTurn }) {
             pieces,
           })
         ) {
-          const copyPiecesArrayWithNewPosition = updatePieceInArray(
+          const copyPiecesArrayWithNewPosition = applyMoveToPieces(
             previousSelectedPiece,
             clickedSquare,
             copyPieces
