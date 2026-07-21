@@ -107,9 +107,32 @@ correctly; flagged and agreed before fixing rather than assumed.
 `pieces[pieces.length - 1]` everywhere. Flagged in the code itself as unclear
 ("why array with an array?"). Needs a clean single-array model before check
 detection and later move-history-dependent rules build on top of it.
-**Status:** Spec needed
+**Status:** Ready
 **Depends on:** none, but blocks T5–T8 (cleaner to build check/checkmate logic
 on the new model).
+
+**Acceptance criteria:**
+- `pieces` state (in `Game.js`) is a flat array of piece objects
+  (`{ id, isWhite, type, positionY, positionX }`) — not an array wrapping a
+  single array.
+- `Game.js` initializes `pieces` directly via `useState(getStartPosition)`.
+  The `useEffect` + `initialized` boolean previously used to defer setting
+  the starting position is removed. (`Board.js`'s separate `initialized`
+  flag, used for building the 64 squares, is unrelated and stays untouched.)
+- Every consumer of `pieces` (`Board.js`, `PiecesRules.js`) reads and writes
+  it as a plain array — no `pieces[pieces.length - 1]` (or equivalent)
+  anywhere in the codebase.
+- All existing tests updated to construct `pieces` fixtures as flat arrays
+  instead of array-of-array. Test behavior/assertions themselves don't
+  change — only the fixture shape.
+
+**Out of scope:**
+- Any lookup-by-position data structure (e.g. a Map/object keyed by
+  position) to replace the linear `.find()`/`.some()` scans — logged as a
+  possible future improvement, not committed to. The board is only 64
+  squares; this is a clarity question, not a performance one.
+- Move history/undo — a separate future ticket if ever wanted. This cleanup
+  does not add or preserve any history mechanism.
 
 ### T5 — Check detection
 Determine whether a given king is currently in check, given a board position.
