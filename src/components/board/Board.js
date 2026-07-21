@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import "./Board.css";
 import Square from "../square/Square";
 import PieceComponent from "../piece/Piece";
-import { rules } from "../piece/PiecesRules";
+import { rules, isKingInCheck } from "../piece/PiecesRules";
 import { ErrorContext } from "../errorBoundary/ErrorBoundary";
 
 const deselectSquareInArray = (squares, selectedSquare) => {
@@ -44,6 +44,16 @@ const applyMoveToPieces = (previousSelectedPiece, clickedSquare, pieces) => {
         return piece;
       }
     });
+};
+
+export const wouldLeaveOwnKingInCheck = (previousSelectedPiece, clickedSquare, pieces) => {
+  const resultingPieces = applyMoveToPieces(
+    previousSelectedPiece,
+    clickedSquare,
+    pieces
+  );
+
+  return isKingInCheck(previousSelectedPiece.isWhite, resultingPieces);
 };
 
 const shouldDeselectPreviousSquare = (selectedSquare, id) =>
@@ -140,7 +150,8 @@ function Board({ pieces, setPieces, isWhiteTurn, setIsWhiteTurn }) {
             currentPosition,
             nextPosition,
             pieces,
-          })
+          }) &&
+          !wouldLeaveOwnKingInCheck(previousSelectedPiece, clickedSquare, copyPieces)
         ) {
           const copyPiecesArrayWithNewPosition = applyMoveToPieces(
             previousSelectedPiece,

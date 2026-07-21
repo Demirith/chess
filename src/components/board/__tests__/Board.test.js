@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { render, fireEvent, cleanup } from "@testing-library/react";
-import Board from "../Board";
+import Board, { wouldLeaveOwnKingInCheck } from "../Board";
 import { getStartPosition } from "../../game/GameUtils";
 
 afterEach(cleanup);
@@ -148,5 +148,97 @@ describe("Board capture logic", () => {
     //Assert - both pieces still present, nothing was removed or overlapped
     const pieceEls = container.querySelectorAll('[data-cy="piece"]');
     expect(pieceEls.length).toBe(2);
+  });
+});
+
+describe("wouldLeaveOwnKingInCheck", () => {
+  test("is true when the king moves into a square an opponent piece attacks", () => {
+    //Arrange
+    const king = { id: "kingA", isWhite: true, type: 6, positionY: 1, positionX: 5 };
+    const pieces = [
+      king,
+      { id: "rookB", isWhite: false, type: 2, positionY: 8, positionX: 4 },
+    ];
+    const clickedSquare = { positionY: 1, positionX: 4 };
+
+    //Act
+    const result = wouldLeaveOwnKingInCheck(king, clickedSquare, pieces);
+
+    //Assert
+    expect(result).toBe(true);
+  });
+
+  test("is true when moving a piece exposes the king to an attack it was blocking", () => {
+    //Arrange
+    const blocker = { id: "knightA", isWhite: true, type: 3, positionY: 1, positionX: 3 };
+    const pieces = [
+      { id: "kingA", isWhite: true, type: 6, positionY: 1, positionX: 5 },
+      blocker,
+      { id: "rookB", isWhite: false, type: 2, positionY: 1, positionX: 1 },
+    ];
+    const clickedSquare = { positionY: 3, positionX: 4 };
+
+    //Act
+    const result = wouldLeaveOwnKingInCheck(blocker, clickedSquare, pieces);
+
+    //Assert
+    expect(result).toBe(true);
+  });
+
+  test("is false when the move doesn't expose the king to any attack", () => {
+    //Arrange
+    const king = { id: "kingA", isWhite: true, type: 6, positionY: 1, positionX: 5 };
+    const pieces = [king];
+    const clickedSquare = { positionY: 2, positionX: 5 };
+
+    //Act
+    const result = wouldLeaveOwnKingInCheck(king, clickedSquare, pieces);
+
+    //Assert
+    expect(result).toBe(false);
+  });
+});
+
+describe("Board rejects moves that leave your own king in check", () => {
+  const pinnedRookScenario = [
+    { id: "kingA", isWhite: true, type: 6, positionY: 1, positionX: 5 },
+    { id: "rookA", isWhite: true, type: 2, positionY: 1, positionX: 3 },
+    { id: "rookB", isWhite: false, type: 2, positionY: 1, positionX: 1 },
+  ];
+
+  test("a legal-for-the-piece move is rejected if it leaves the king in check", () => {
+    //Arrange
+    const { container, getByTestId } = render(
+      <TestGame initialPieces={pinnedRookScenario} />
+    );
+
+    //Act - the pinned rook has a clear, otherwise-legal path off the rank
+    clickSquare(container, 1, 3);
+    clickSquare(container, 4, 3);
+
+    //Assert - rejected: rook didn't move, still white's turn
+    const originalSquare = container.querySelectorAll('[data-cy="square"]')[
+      squareIndexFor(1, 3)
+    ];
+    expect(originalSquare.querySelector('[data-cy="piece"]')).not.toBeNull();
+    expect(getByTestId("turn").textContent).toBe("white");
+  });
+
+  test("the same pinned piece can still move along the line it's blocking", () => {
+    //Arrange
+    const { container, getByTestId } = render(
+      <TestGame initialPieces={pinnedRookScenario} />
+    );
+
+    //Act - moving along the rank still blocks the attacking rook, king stays safe
+    clickSquare(container, 1, 3);
+    clickSquare(container, 1, 4);
+
+    //Assert - allowed: rook moved, turn passed to black
+    const destinationSquare = container.querySelectorAll('[data-cy="square"]')[
+      squareIndexFor(1, 4)
+    ];
+    expect(destinationSquare.querySelector('[data-cy="piece"]')).not.toBeNull();
+    expect(getByTestId("turn").textContent).toBe("black");
   });
 });
