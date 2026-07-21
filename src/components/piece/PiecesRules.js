@@ -101,7 +101,7 @@ const getSquersInPath = (currentPosition, nextPosition) => {
 };
 
 const isOwnPieceAt = (position, isWhite, pieces) =>
-  Array.from(pieces[pieces.length - 1]).some(
+  pieces.some(
     (piece) =>
       piece.positionY === position.y &&
       piece.positionX === position.x &&
@@ -109,7 +109,7 @@ const isOwnPieceAt = (position, isWhite, pieces) =>
   );
 
 const isOpponentPieceAt = (position, isWhite, pieces) =>
-  Array.from(pieces[pieces.length - 1]).some(
+  pieces.some(
     (piece) =>
       piece.positionY === position.y &&
       piece.positionX === position.x &&
@@ -120,7 +120,7 @@ const checkSquares = (squaresInPath, pieces) => {
   let isValidPath = true;
 
   squaresInPath.some((square) => {
-    const hasPieceInSquare = Array.from(pieces[pieces.length - 1]).some(
+    const hasPieceInSquare = pieces.some(
       (piece) => piece.positionY === square.y && piece.positionX === square.x
     );
 

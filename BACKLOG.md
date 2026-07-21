@@ -107,7 +107,7 @@ correctly; flagged and agreed before fixing rather than assumed.
 `pieces[pieces.length - 1]` everywhere. Flagged in the code itself as unclear
 ("why array with an array?"). Needs a clean single-array model before check
 detection and later move-history-dependent rules build on top of it.
-**Status:** Ready
+**Status:** Done
 **Depends on:** none, but blocks T5–T8 (cleaner to build check/checkmate logic
 on the new model).
 

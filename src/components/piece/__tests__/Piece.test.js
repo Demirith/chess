@@ -19,7 +19,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 1, x: 1 }
             const nextPostition = { y: 3, x: 1 }
     
-            const pieces = [getStartPosition]; // create test senario 
+            const pieces = getStartPosition; // create test senario 
             let validMove = true;
     
             //Act 
@@ -34,7 +34,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 3, x: 1 }
             const nextPostition = { y: 6, x: 1 }
     
-            const pieces = [getStartPosition]; // create test senario 
+            const pieces = getStartPosition; // create test senario 
             let validMove = true;
     
             //Act 
@@ -51,7 +51,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 1, x: 1 }
             const nextPostition = { y: 1, x: 3 }
     
-            const pieces = [getStartPosition]; // create test senario 
+            const pieces = getStartPosition; // create test senario 
             let validMove = true;
     
             //Act 
@@ -66,7 +66,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 1, x: 3 }
             const nextPostition = { y: 1, x: 1 }
     
-            const pieces = [getStartPosition]; // create test senario 
+            const pieces = getStartPosition; // create test senario 
             let validMove = true;
     
             //Act 
@@ -81,7 +81,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 3, x: 1 }
             const nextPostition = { y: 3, x: 3 }
     
-            const pieces = [getStartPosition]; // create test senario 
+            const pieces = getStartPosition; // create test senario 
             let validMove = true;
     
             //Act 
@@ -96,7 +96,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 3, x: 3 }
             const nextPostition = { y: 3, x: 1 }
     
-            const pieces = [getStartPosition]; // create test senario 
+            const pieces = getStartPosition; // create test senario 
             let validMove = true;
     
             //Act 
@@ -112,7 +112,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 1, x: 3 }
             const nextPostition = { y: 3, x: 5 }
     
-            const pieces = [getStartPosition];  
+            const pieces = getStartPosition;  
             let validMove = true;
     
             //Act 
@@ -127,7 +127,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 1, x: 3 }
             const nextPostition = { y: 3, x: 1 }
     
-            const pieces = [getStartPosition];  
+            const pieces = getStartPosition;  
             let validMove = true;
     
             //Act 
@@ -142,7 +142,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 5, x: 3 }
             const nextPostition = { y: 3, x: 5 }
     
-            const pieces = [getStartPosition];  
+            const pieces = getStartPosition;  
             let validMove = true;
     
             //Act 
@@ -157,7 +157,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 5, x: 3 }
             const nextPostition = { y: 3, x: 1 }
     
-            const pieces = [getStartPosition];  
+            const pieces = getStartPosition;  
             let validMove = true;
     
             //Act 
@@ -172,7 +172,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 3, x: 3 }
             const nextPostition = { y: 5, x: 1 }
     
-            const pieces = [getStartPosition];  
+            const pieces = getStartPosition;  
             let validMove = true;
     
             //Act 
@@ -187,7 +187,7 @@ describe("Path validation", () => {
             const currentPosition = { y: 3, x: 3 }
             const nextPostition = { y: 5, x: 5 }
     
-            const pieces = [getStartPosition];  
+            const pieces = getStartPosition;  
             let validMove = true;
     
             //Act 
@@ -203,7 +203,7 @@ describe("Path validation", () => {
             //Arrange
             const currentPosition = { y: 1, x: 4 }
             const nextPostition = { y: 1, x: 8 }
-            const pieces = [[{ id: "blockerA", isWhite: true, type: 1, positionY: 1, positionX: 6 }]];
+            const pieces = [{ id: "blockerA", isWhite: true, type: 1, positionY: 1, positionX: 6 }];
 
             //Act
             const validMove = checkPath(currentPosition, nextPostition, pieces);
@@ -216,7 +216,7 @@ describe("Path validation", () => {
             //Arrange
             const currentPosition = { y: 1, x: 4 }
             const nextPostition = { y: 1, x: 8 }
-            const pieces = [[]];
+            const pieces = [];
 
             //Act
             const validMove = checkPath(currentPosition, nextPostition, pieces);
@@ -229,7 +229,7 @@ describe("Path validation", () => {
             //Arrange
             const currentPosition = { y: 1, x: 1 }
             const nextPostition = { y: 5, x: 5 }
-            const pieces = [[{ id: "blockerA", isWhite: true, type: 1, positionY: 3, positionX: 3 }]];
+            const pieces = [{ id: "blockerA", isWhite: true, type: 1, positionY: 3, positionX: 3 }];
 
             //Act
             const validMove = checkPath(currentPosition, nextPostition, pieces);
@@ -245,9 +245,9 @@ describe("Queen movement rules", () => {
 
     test("Should be able to move in a straight line with a clear path", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "queenA", isWhite: true, type: pieceTypes.Queen, positionY: 1, positionX: 4 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 4 };
         const nextPosition = { y: 1, x: 8 };
 
@@ -260,9 +260,9 @@ describe("Queen movement rules", () => {
 
     test("Should be able to move diagonally with a clear path", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "queenA", isWhite: true, type: pieceTypes.Queen, positionY: 1, positionX: 4 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 4 };
         const nextPosition = { y: 4, x: 7 };
 
@@ -275,9 +275,9 @@ describe("Queen movement rules", () => {
 
     test("Should not be able to move like a knight", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "queenA", isWhite: true, type: pieceTypes.Queen, positionY: 1, positionX: 4 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 4 };
         const nextPosition = { y: 3, x: 5 };
 
@@ -290,10 +290,10 @@ describe("Queen movement rules", () => {
 
     test("Should not be able to move through a piece blocking a straight path", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "queenA", isWhite: true, type: pieceTypes.Queen, positionY: 1, positionX: 4 },
             { id: "blockerA", isWhite: true, type: pieceTypes.Pawn, positionY: 1, positionX: 6 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 4 };
         const nextPosition = { y: 1, x: 8 };
 
@@ -306,10 +306,10 @@ describe("Queen movement rules", () => {
 
     test("Should not be able to move through a piece blocking a diagonal path", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "queenA", isWhite: true, type: pieceTypes.Queen, positionY: 1, positionX: 4 },
             { id: "blockerA", isWhite: true, type: pieceTypes.Pawn, positionY: 2, positionX: 5 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 4 };
         const nextPosition = { y: 4, x: 7 };
 

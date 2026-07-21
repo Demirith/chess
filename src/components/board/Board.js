@@ -96,7 +96,7 @@ function Board({ pieces, setPieces, isWhiteTurn, setIsWhiteTurn }) {
   const squareClicked = useCallback(
     (id) => {
       // Is this needed? To Copy the array.
-      const copyPieces = Array.from(pieces[pieces.length - 1]);
+      const copyPieces = Array.from(pieces);
       const clickedSquare = squares.find((square) => square.id === id);
 
       if (shouldDeselectPreviousSquare(selectedSquare, id)) {
@@ -148,7 +148,7 @@ function Board({ pieces, setPieces, isWhiteTurn, setIsWhiteTurn }) {
             copyPieces
           );
 
-          setPieces([copyPiecesArrayWithNewPosition]); // Why array in array?
+          setPieces(copyPiecesArrayWithNewPosition);
           setIsWhiteTurn(!isWhiteTurn);
         }
       }
@@ -192,9 +192,7 @@ function Board({ pieces, setPieces, isWhiteTurn, setIsWhiteTurn }) {
 
     setSquaresAndPieces(
       squares.map((square, index) => {
-        //test what is the fastes way to get copy from last element in array
-        const lastPieces = Array.from(pieces[pieces.length - 1]);
-        const piece = lastPieces.find(
+        const piece = pieces.find(
           (piece) =>
             Object.is(piece.positionY, square.positionY) &&
             Object.is(piece.positionX, square.positionX)

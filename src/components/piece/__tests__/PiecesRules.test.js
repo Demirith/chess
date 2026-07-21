@@ -87,10 +87,10 @@ describe("Pawn capture rules", () => {
 describe("rules() same-color and capture handling", () => {
     test("rejects a move onto a square occupied by your own piece", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "rookA", isWhite: true, type: pieceTypes.Rook, positionY: 1, positionX: 1 },
             { id: "pawnA", isWhite: true, type: pieceTypes.Pawn, positionY: 1, positionX: 4 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 1 };
         const nextPosition = { y: 1, x: 4 };
         const report = jest.fn();
@@ -105,10 +105,10 @@ describe("rules() same-color and capture handling", () => {
 
     test("allows a rook to capture an opponent piece with a clear path", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "rookA", isWhite: true, type: pieceTypes.Rook, positionY: 1, positionX: 1 },
             { id: "pawnB", isWhite: false, type: pieceTypes.Pawn, positionY: 1, positionX: 4 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 1 };
         const nextPosition = { y: 1, x: 4 };
         const report = jest.fn();
@@ -122,10 +122,10 @@ describe("rules() same-color and capture handling", () => {
 
     test("allows a knight to capture an opponent piece", () => {
         //Arrange
-        const pieces = [[
+        const pieces = [
             { id: "knightA", isWhite: true, type: pieceTypes.Knight, positionY: 1, positionX: 1 },
             { id: "pawnB", isWhite: false, type: pieceTypes.Pawn, positionY: 3, positionX: 2 },
-        ]];
+        ];
         const currentPosition = { y: 1, x: 1 };
         const nextPosition = { y: 3, x: 2 };
         const report = jest.fn();

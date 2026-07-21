@@ -11,7 +11,7 @@ const squareIndexFor = (positionY, positionX) =>
   (8 - positionY) * 8 + (positionX - 1);
 
 function TestGame({ initialPieces = getStartPosition, initialIsWhiteTurn = true }) {
-  const [pieces, setPieces] = useState([initialPieces]);
+  const [pieces, setPieces] = useState(initialPieces);
   const [isWhiteTurn, setIsWhiteTurn] = useState(initialIsWhiteTurn);
 
   return (
