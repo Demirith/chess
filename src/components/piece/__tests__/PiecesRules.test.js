@@ -1,4 +1,4 @@
-import { pawnRules, rules, pieceTypes } from '../PiecesRules';
+import { pawnRules, rules, pieceTypes, isKingInCheck } from '../PiecesRules';
 
 describe("Pawn capture rules", () => {
     describe("White", () => {
@@ -135,5 +135,119 @@ describe("rules() same-color and capture handling", () => {
 
         //Assert
         expect(validMove).toBe(true);
+    });
+});
+
+describe("isKingInCheck", () => {
+    test("is true when an opponent rook has a clear line to the king", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 1, positionX: 5 },
+            { id: "rookB", isWhite: false, type: pieceTypes.Rook, positionY: 1, positionX: 1 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(true);
+    });
+
+    test("is false when the attacking piece's path to the king is blocked", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 1, positionX: 5 },
+            { id: "rookB", isWhite: false, type: pieceTypes.Rook, positionY: 1, positionX: 1 },
+            { id: "blockerA", isWhite: true, type: pieceTypes.Pawn, positionY: 1, positionX: 3 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(false);
+    });
+
+    test("is true when an opponent knight threatens the king", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 1, positionX: 5 },
+            { id: "knightB", isWhite: false, type: pieceTypes.Knight, positionY: 2, positionX: 3 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(true);
+    });
+
+    test("is true when an opponent pawn threatens the king diagonally", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 5, positionX: 5 },
+            { id: "pawnB", isWhite: false, type: pieceTypes.Pawn, positionY: 6, positionX: 4 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(true);
+    });
+
+    test("is true when an opponent queen threatens the king diagonally", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 1, positionX: 5 },
+            { id: "queenB", isWhite: false, type: pieceTypes.Queen, positionY: 5, positionX: 1 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(true);
+    });
+
+    test("is false when no opponent piece can reach the king", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 1, positionX: 5 },
+            { id: "rookB", isWhite: false, type: pieceTypes.Rook, positionY: 8, positionX: 1 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(false);
+    });
+
+    test("is false when the only piece that could reach the square is the same color as the king", () => {
+        //Arrange
+        const pieces = [
+            { id: "kingA", isWhite: true, type: pieceTypes.King, positionY: 1, positionX: 5 },
+            { id: "rookA", isWhite: true, type: pieceTypes.Rook, positionY: 1, positionX: 1 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(false);
+    });
+
+    test("is false when the given color's king isn't on the board", () => {
+        //Arrange
+        const pieces = [
+            { id: "rookB", isWhite: false, type: pieceTypes.Rook, positionY: 1, positionX: 1 },
+        ];
+
+        //Act
+        const inCheck = isKingInCheck(true, pieces);
+
+        //Assert
+        expect(inCheck).toBe(false);
     });
 });

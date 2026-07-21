@@ -136,7 +136,7 @@ on the new model).
 
 ### T5 — Check detection
 Determine whether a given king is currently in check, given a board position.
-**Status:** Ready
+**Status:** Done
 **Depends on:** T4
 
 **Acceptance criteria:**

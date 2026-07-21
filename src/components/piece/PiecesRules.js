@@ -200,3 +200,30 @@ export const rules = (
 
   return validMove;
 };
+
+const noopReport = () => {};
+
+export const isKingInCheck = (isWhite, pieces) => {
+  const king = pieces.find(
+    (piece) => piece.type === pieceTypes.King && piece.isWhite === isWhite
+  );
+
+  if (!king) {
+    return false;
+  }
+
+  const kingPosition = { y: king.positionY, x: king.positionX };
+
+  return pieces.some(
+    (piece) =>
+      piece.isWhite !== isWhite &&
+      rules(
+        piece.type,
+        piece.isWhite,
+        { y: piece.positionY, x: piece.positionX },
+        kingPosition,
+        pieces,
+        noopReport
+      )
+  );
+};
