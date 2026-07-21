@@ -164,8 +164,31 @@ Determine whether a given king is currently in check, given a board position.
 ### T6 — No moving into check
 A move that would leave the moving player's own king in check must be rejected,
 even if it's otherwise legal for that piece.
-**Status:** Spec needed
+**Status:** Ready
 **Depends on:** T5
+
+**Acceptance criteria:**
+- A move that `rules()` already considers legal for the piece is additionally
+  rejected if it would leave the moving player's own king in check. Uses
+  `isKingInCheck` (T5) on the board position that would result from the move
+  (computed via the existing `applyMoveToPieces`) — no duplicated check logic.
+- This needs no special-casing to correctly cover: the king moving into an
+  attacked square, and any other piece moving in a way that exposes the king
+  to attack (a pinned piece) — both fall out of simulating the resulting
+  position and checking it, same as any other move.
+- If the moving player's king is already in check before the move, a move
+  that doesn't resolve that check is rejected by this same mechanism — no
+  separate "already in check" tracking needed.
+- A rejected check-unsafe move behaves exactly like any other illegal move:
+  silent no-op, no state change, turn does not switch (consistent with T1).
+- The simulate-then-check logic is extracted into a small pure function in
+  `Board.js` (e.g. `wouldLeaveOwnKingInCheck`), not inlined into
+  `squareClicked`, so it can be unit-tested directly.
+
+**Out of scope:**
+- Checkmate/stalemate detection (T7/T8) — determining whether the player has
+  *any* legal move at all is separate, larger work.
+- Any visible "in check" indicator (already deferred in the "Could" tier).
 
 ### T7 — Checkmate detection
 Game ends when the side to move is in check and has no legal move that escapes it.
