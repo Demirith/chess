@@ -136,8 +136,30 @@ on the new model).
 
 ### T5 — Check detection
 Determine whether a given king is currently in check, given a board position.
-**Status:** Spec needed
+**Status:** Ready
 **Depends on:** T4
+
+**Acceptance criteria:**
+- A new exported function (e.g. `isKingInCheck(isWhite, pieces)`) in
+  `PiecesRules.js` determines whether the king of the given color is
+  currently under attack, given a board position.
+- Implementation reuses the existing `rules()` function rather than
+  duplicating movement logic: the king is in check if any opponent piece
+  could legally move onto the king's current square right now (this
+  correctly includes pawn diagonal captures, path-blocking, etc. for free,
+  since capturing a king is mechanically identical to capturing any other
+  piece from the movement-rules' point of view).
+- The check is independent of whose turn it is — it's a static, geometric
+  read of a board position, not tied to turn state.
+- If the given color's king isn't present on the board (e.g. a minimal test
+  fixture without one), the function returns `false` rather than throwing.
+
+**Out of scope:**
+- Not wired into `Board.js` or any UI — this ticket adds the capability
+  only, with unit tests. T6 is where it's actually used to reject moves
+  that leave your own king in check.
+- Any visible check indicator (already deferred in the "Could" tier).
+- Checkmate/stalemate detection (T7/T8).
 
 ### T6 — No moving into check
 A move that would leave the moving player's own king in check must be rejected,
