@@ -164,7 +164,7 @@ Determine whether a given king is currently in check, given a board position.
 ### T6 — No moving into check
 A move that would leave the moving player's own king in check must be rejected,
 even if it's otherwise legal for that piece.
-**Status:** Ready
+**Status:** Done
 **Depends on:** T5
 
 **Acceptance criteria:**
